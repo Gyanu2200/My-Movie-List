@@ -3,14 +3,31 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { Button, Alert} from 'react-bootstrap';
 import { MovieCard } from './MovieCard';
-import { useState } from 'react';
-import { fetchData } from '../axiosHelpers';
+import { useEffect, useState } from 'react';
+import { fetchData } from '../utilities/axiosHelpers';
+import { RandomGenerator } from '../utilities/RandomGenerator';
+
 
 
 export const SearchForm = ({addMovieToList}) => {
   const [form ,setForm] = useState("")
   const [movie, setMovie] = useState({});
   const [error, setError] = useState("");
+
+
+  useEffect(()=>{
+    //generate random char
+    const char = RandomGenerator();
+    console.log(char);
+
+    // and call fetch api
+    const initialFetch = async() =>{
+      const resp = await fetchData(char);
+      // set movie to state
+      setMovie(resp.data)
+    }
+    initialFetch();
+  },[]);
 
   // get the form data while typing
   const handleOnChange = (e) => {
@@ -54,6 +71,20 @@ export const SearchForm = ({addMovieToList}) => {
     setMovie({});
     setForm("");
   }
+  const handleOnClear = () =>{
+    setMovie([]);
+    //generate random char
+    const char = RandomGenerator();
+    console.log(char);
+
+    // and call fetch api
+    const initialFetch = async() =>{
+      const resp = await fetchData(char);
+      // set movie to state
+      setMovie(resp.data)
+    }
+    initialFetch();
+  }
   return (
     <Form className="py-3" onSubmit = {handleOnSubmit}>
       <Row>
@@ -69,8 +100,11 @@ export const SearchForm = ({addMovieToList}) => {
         </Col>
       </Row>
       <Row className="py-3 d-flex justify-content-center">
-        {movie.imdbID && <MovieCard movie = {movie}
-        func={handleOnAddToList}/>}
+        {movie.imdbID && <MovieCard 
+        movie = {movie}
+        func={handleOnAddToList}
+        handleOnClear={handleOnClear}
+        />}
         {error && <Alert variant="danger">{error}</Alert>}
         
       </Row>

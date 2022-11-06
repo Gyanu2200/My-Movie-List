@@ -1,11 +1,11 @@
 import {React, Button, ButtonGroup} from 'react-bootstrap'
 
-export const BtnGroup = () => {
+export const BtnGroup = ({handleOnFilter}) => {
   return (
         <ButtonGroup aria-label="Basic example">
-            <Button variant="primary">All</Button>
-            <Button variant="danger">Happy</Button>
-            <Button variant="warning">Lazy</Button>
+            <Button onClick={()=>handleOnFilter('all')} variant="primary">All</Button>
+            <Button onClick={()=>handleOnFilter('happy')} variant="danger">Happy</Button>
+            <Button onClick={()=>handleOnFilter('lazy')} variant="warning">Lazy</Button>
         </ButtonGroup>
   )
 }

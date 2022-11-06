@@ -1,11 +1,11 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
-export const MovieCard = ({movie = {}, func}) => {
+export const MovieCard = ({movie = {}, func, showDelete, handleOnClear}) => {
   console.log(movie);
-  const {Poster, Title, Year, imdbRating} = movie;
+  const {Poster, Title, Year, imdbRating, imdbID} = movie;
   return (
-    <Card style={{ width: "18rem", marginTop: "10px", color:"black"}}>
+    <Card style={{ width: "18rem", marginTop: "10px", color:"black"}} className="movie-card">
       <Card.Img variant="top" src={Poster} />
       <Card.Body>
         <Card.Title>{Title}</Card.Title>
@@ -13,11 +13,20 @@ export const MovieCard = ({movie = {}, func}) => {
           <div>Released: {Year}</div>
           <div>Rating: {imdbRating}</div>
         </Card.Text>
-        <div className="d-flex justify-content-between">
-        <Button onClick={()=> func('happy')} variant="danger">Happy</Button>
-        <Button onClick={()=> func('lazy')} variant="warning">Lazy</Button>
-        </div>
-        
+        {
+          showDelete ?  
+          (<div className="d-grid">
+            <Button variant='danger' onClick={()=> func(imdbID)}>Delete</Button>
+          </div>):
+          (<div className="d-flex justify-content-between">
+            <Button onClick={()=> func('happy')} variant="danger">Happy</Button>
+            <span className="icon">
+              <i onClick={handleOnClear} className="fa-solid fa-circle-xmark text-danger" style={{zoom: "200%"}}></i>
+            </span>
+            <Button onClick={()=> func('lazy')} variant="warning">Lazy</Button>
+          </div>)
+         
+        }  
       </Card.Body>
     </Card>
   );
